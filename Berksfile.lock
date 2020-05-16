@@ -1,0 +1,10 @@
+DEPENDENCIES
+  line (~> 2.8.0)
+  rorschach
+    path: .
+    metadata: true
+
+GRAPH
+  line (2.8.0)
+  rorschach (1.0.0)
+    line (>= 0.0.0)
