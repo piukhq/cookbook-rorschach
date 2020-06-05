@@ -6,5 +6,5 @@ DEPENDENCIES
 
 GRAPH
   line (2.8.0)
-  rorschach (1.0.1)
+  rorschach (1.0.2)
     line (>= 0.0.0)
