@@ -6,7 +6,6 @@ end
 apt_repository 'nginx' do
   uri 'http://ppa.launchpad.net/nginx/stable/ubuntu'
   components ['main']
-  distribution 'bionic'
   key '00A6F0A3C300EE8C'
   keyserver 'keyserver.ubuntu.com'
   action :add
@@ -15,7 +14,6 @@ end
 apt_repository 'certbot' do
   uri 'http://ppa.launchpad.net/certbot/certbot/ubuntu'
   components ['main']
-  distribution 'bionic'
   key '8C47BE8E75BCA694'
   keyserver 'keyserver.ubuntu.com'
   action :add
@@ -29,8 +27,9 @@ package %w(
   action :install
 end
 
+# For some reason nginx doesnt come enabled on 16.04 :/
 service 'nginx' do
-  action :nothing
+  action :enable
 end
 
 template '/etc/nginx/nginx.conf' do

@@ -4,13 +4,15 @@ driver:
 
 provisioner:
   name: chef_solo
+  chef_license: accept-no-persist
   product_version: 15.9.17
-  environments_path: 'test/integration/environments'
+  #environments_path: 'test/integration/environments'
   solo_rb:
     environment: vagrant
 
 platforms:
 - name: bento/ubuntu-18.04
+# - name: bento/ubuntu-16.04
 
 verifier:
   name: inspec
@@ -18,7 +20,7 @@ verifier:
 suites:
 - name: rorschach
   run_list:
-  - recipe[rorschach::default]
+  - recipe[rorschach]
   verifier:
     inspec_tests:
     - test/integration/default
