@@ -1,4 +1,8 @@
-# rorschach
+---
+page_title: "Rorschach"
+---
+
+[![Build Status](https://git.bink.com/DevOps/Cookbooks/rorschach/badges/master/pipeline.svg)](https://git.bink.com/DevOps/Cookbooks/rorschach)
 
 Rorschach installs NGINX and configures it to act as a reverse proxy for any deployed Application. Certbot is also installed to manage TLS certificates on an ongoing basis. Nginx is configured against Mozillas [recommendations](https://ssl-config.mozilla.org/)
 
@@ -30,6 +34,6 @@ Rorschach's attributes should be overriden as part of a role spec as per Chef [d
 }                                                  
 ```
 
-# TODO
+## TODO
 
 * More Attributes/Customisations to `templates/default/nginx.conf.erb`
