@@ -1,6 +1,6 @@
 %w(
-  http://ppa.launchpad.net/nginx/stable/ubuntu
-  http://ppa.launchpad.net/certbot/certbot/ubuntu
+  ppa:nginx/stable
+  ppa:certbot/certbot
 ).each do |i|
   describe apt(i) do
     it { should exist }

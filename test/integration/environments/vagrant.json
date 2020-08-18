@@ -4,6 +4,8 @@
     "cookbook_versions": {},
     "json_class": "Chef::Environment",
     "chef_type": "environment",
-    "default_attributes": {},
+    "default_attributes": {
+        "rorschach": {"nginx": {"proxy_read_timeout": "600"}}
+    },
     "override_attributes": {}
 }

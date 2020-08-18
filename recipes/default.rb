@@ -1,10 +1,5 @@
-delete_lines 'remove cdrom references' do # Fix InSpec Parsing error
-  path '/etc/apt/sources.list'
-  pattern /cdrom/
-end
-
 apt_repository 'nginx' do
-  uri 'http://ppa.launchpad.net/nginx/stable/ubuntu'
+  uri 'ppa:nginx/stable'
   components ['main']
   key '00A6F0A3C300EE8C'
   keyserver 'keyserver.ubuntu.com'
@@ -12,7 +7,7 @@ apt_repository 'nginx' do
 end
 
 apt_repository 'certbot' do
-  uri 'http://ppa.launchpad.net/certbot/certbot/ubuntu'
+  uri 'ppa:certbot/certbot'
   components ['main']
   key '8C47BE8E75BCA694'
   keyserver 'keyserver.ubuntu.com'
@@ -41,7 +36,10 @@ template '/etc/nginx/nginx.conf' do
   notifies :restart, 'service[nginx]'
   variables(
     domain: node['rorschach']['domain'],
-    port: node['rorschach']['port']
+    port: node['rorschach']['port'],
+    proxy_read_timeout: node['rorschach']['nginx']['proxy_read_timeout'],
+    proxy_send_timeout: node['rorschach']['nginx']['proxy_send_timeout'],
+    client_max_body_size: node['rorschach']['nginx']['client_max_body_size']
   )
 end
 
