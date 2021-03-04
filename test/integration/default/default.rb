@@ -1,21 +1,5 @@
-%w(
-  ppa:nginx/stable
-  ppa:certbot/certbot
-).each do |i|
-  describe apt(i) do
-    it { should exist }
-    it { should be_enabled }
-  end
-end
-
-%w(
-  nginx
-  certbot
-  python3-certbot-dns-cloudflare
-).each do |i|
-  describe package(i) do
-    it { should be_installed }
-  end
+describe package('nginx') do
+  it { should be_installed }
 end
 
 describe file('/etc/nginx/nginx.conf') do
@@ -28,7 +12,7 @@ describe file('/etc/nginx/sites-enabled/default') do
   it { should_not exist }
 end
 
-describe file('/etc/letsencrypt/cloudflare.ini') do
+describe file('/etc/letsencrypt/azure.json') do
   its('uid') { should eq 0 }
   its('gid') { should eq 0 }
   its('mode') { should cmp '0600' }
