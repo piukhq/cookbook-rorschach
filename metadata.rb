@@ -1,5 +1,5 @@
 name 'rorschach'
 description 'Secure NGINX AutoTLS Reverse Proxy'
-version '1.1.0'
+version '1.2.0'
 
 depends 'line'

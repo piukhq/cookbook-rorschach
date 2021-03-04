@@ -6,25 +6,33 @@ apt_repository 'nginx' do
   action :add
 end
 
-apt_repository 'certbot' do
-  uri 'ppa:certbot/certbot'
-  components ['main']
-  key '8C47BE8E75BCA694'
-  keyserver 'keyserver.ubuntu.com'
-  action :add
+package 'certbot' do
+  action :remove
+  notifies :run, 'execute[apt_cleanup]', :immediately
+end
+
+execute 'apt_cleanup' do
+  command 'apt-get -y autoremove'
+  action :nothing
 end
 
 package %w(
   nginx
-  certbot
-  python3-certbot-dns-cloudflare
+  python3-pip
 ) do
   action :install
 end
 
-# For some reason nginx doesnt come enabled on 16.04 :/
+execute 'pip3 install certbot-azure==0.1.0' do
+  not_if 'pip3 freeze | grep certbot-azure==0.1.0'
+end
+
+execute 'pip3 install cryptography==3.2' do
+  not_if 'pip3 freeze | grep cryptography==3.2'
+end
+
 service 'nginx' do
-  action :enable
+  action [:enable, :start]
 end
 
 template '/etc/nginx/nginx.conf' do
@@ -48,8 +56,14 @@ file '/etc/nginx/sites-enabled/default' do
   notifies :restart, 'service[nginx]'
 end
 
-cookbook_file '/etc/letsencrypt/cloudflare.ini' do
-  source 'cloudflare.ini'
+directory '/etc/letsencrypt' do
+  owner 'root'
+  group 'root'
+  mode '0755'
+end
+
+cookbook_file '/etc/letsencrypt/azure.json' do
+  source 'azure.json'
   owner 'root'
   group 'root'
   mode '0600'
@@ -57,8 +71,9 @@ cookbook_file '/etc/letsencrypt/cloudflare.ini' do
 end
 
 certbot_args = [
-  '--dns-cloudflare',
-  '--dns-cloudflare-credentials /etc/letsencrypt/cloudflare.ini',
+  '-a dns-azure',
+  '--dns-azure-credentials /etc/letsencrypt/azure.json',
+  '--dns-azure-resource-group uksouth-dns',
   '--preferred-challenges dns-01',
   '--agree-tos',
   '--non-interactive',
@@ -72,7 +87,7 @@ if node.chef_environment == 'vagrant'
 end
 
 execute 'certbot' do
-  command "/usr/bin/certbot certonly #{certbot_args.join(' ')}"
+  command "/usr/local/bin/certbot certonly #{certbot_args.join(' ')}"
   not_if { ::File.exist?("/etc/letsencrypt/live/#{node['rorschach']['domain']}/privkey.pem") }
   retries 10
 end
